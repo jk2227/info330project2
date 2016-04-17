@@ -10,10 +10,6 @@ import json
 import os 
 from allstar_reader import getAllStars 
 
-
-
-
-
 u_a = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36"
 #seasons= ['','2011-12', '2012-13', '2013-14', '2014-15', '2015-16']
 season_players_map = getAllStars()
@@ -41,9 +37,6 @@ for season in season_players_map.keys():
         shot_data = r.json()['resultSets'][0]['rowSet']
         shot_data = map(lambda x: (x[17], x[18], x[20]), shot_data)
         player_map[player_id] = [player[1], player[2], player[3], shot_data]
-    
-   # with open('shot_chart_data_15_16/'+player_name+'_all.json','w') as outfile:
-    #    json.dump(r.json(), outfile)
     
     shots[season] = player_map 
 

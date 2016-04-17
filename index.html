@@ -170,6 +170,28 @@ var xScale = d3.scale.linear().domain([-300, 300]).range([padding, width - paddi
 var yScale = d3.scale.linear().domain([-100, 400]).range([height - padding, 0+padding]);
 
 drawCourt(svg, 0); 
+
+function plotShots(svg, season) {
+	var season_players_map;
+    d3.json("dictionary.json", function(error, result) { 
+	  season_players_map = JSON.parse(result);
+	  players_map = season_players_map[season];
+	  for (var key in players_map) {
+	  	if(players_map.hasOwnProperty(key)) {
+	  		var shots = players_map[key][3]
+	  		for(var i = 0; i < shots.length; i++) {
+	  		  if(shots[i][2] == 0) { //missed shot 
+	  			svg.append("circle").attr("cx",xScale(shots[i][0])).attr("cy",yScale(shots[i][1])).attr("r",3).attr("fill","red").attr('fill-opacity', 0.2);
+	  	      } else { //made shot
+	  	           svg.append("circle").attr("cx",xScale(shots[i][0])).attr("cy",yScale(shots[i][1])).attr("r",3).attr("fill","blue").attr('fill-opacity', 0.2);
+	  	       }
+	  	    }
+	  	}
+	  }
+    });
+}
+
+plotShots(svg, "2015-16");
 </script>
 </body>
 </html>
