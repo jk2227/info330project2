@@ -56,7 +56,7 @@ var svg2 = d3.select("#demo2").append("svg")
 
 
 var hexbin = d3.hexbin()
-    .size([width, height])
+    //.size([width, height])
     .radius(10);
 
 svg2.append("g")
