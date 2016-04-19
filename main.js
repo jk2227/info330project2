@@ -158,7 +158,6 @@ var color = d3.scale.linear()
     .interpolate(d3.interpolateLab);
 
 var hexbin = d3.hexbin()
-    .size([1000,1000])
     .radius(5)
 
 d3.json("dictionary.json", function(error, result) { 
