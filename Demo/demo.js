@@ -23,7 +23,7 @@ var svg = d3.select("#demo1").append("svg")
 	.call(drag)
 
 svg.on("mousedown", function(){
-	svg.select("circle").remove();
+	svg.select(".circle").remove();
 	var coords = d3.mouse(this);
 	var x = coords[0];
 	var y = coords[1];
