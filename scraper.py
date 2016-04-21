@@ -36,7 +36,7 @@ for season in season_players_map.keys():
         r = requests.get(player_games_all, headers={"USER-AGENT":u_a})
         shot_data = r.json()['resultSets'][0]['rowSet']
         shot_data = map(lambda x: (x[17], x[18], x[20], player[1], player[2], player[3]), shot_data)
-        player_map[player_id] = [player[1], player[2], player[3], shot_data]
+        player_map[player_id] = [player_id, player[1], player[2], player[3], shot_data, player[4], player[5], player[6], player[7]]
     
     shots[season] = player_map 
 
