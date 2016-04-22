@@ -1,0 +1,69 @@
+body{ 
+	font-family: "Open Sans"; 
+	display: inline;
+}
+div{
+	margin: 30px;
+}
+body{
+	font-family: "Open Sans";
+}
+svg{
+	margin: 20px;
+	background-color: #eee;
+	float: left
+}
+.bar rect {
+	fill: #ccc;
+}
+.axis path {
+	fill: none; stroke: black;
+}
+.axis line {
+	stroke: black;
+}
+.axis text {
+	font-size: x-small;
+}
+.dullorange {
+	fill: rgb(255, 167, 94);
+}
+.hexagon {
+	fill: none;
+	stroke: #000;
+	stroke-width: .5px;
+	opacity: .7
+}
+
+.player-card{
+	width: 250px;
+	background-color: grey;
+	border: solid;
+	border-radius: 2px;
+	padding: 10px;
+	text-align: center;
+}
+
+#prof-pic{
+	width: 100%;
+	border: solid;
+	background-color: white
+}
+
+.stats h3{
+	display: inline
+}
+
+.team img{
+	position: fixed;
+	width: 6%;
+	left: 5px;
+	top: 0;
+}
+
+.player-cards{
+	float: right;
+	height: 800px;
+	overflow: scroll;
+}
+

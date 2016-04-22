@@ -209,6 +209,7 @@ function dragging(d){
     var distance = Math.sqrt(Math.pow((hexX - cx),2) + Math.pow((hexY - cy),2))
 
     if (distance <= r){
+      playerCards(d)
       hex.style("fill", "black")
       selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
     }
@@ -328,9 +329,44 @@ function plotShots(svg, season) {
       })
     }
     else{
+      removeCards()
+      playerCards(d)
       d3.select(this).style("fill", "rgb(0, 0, 0)")
     }
   })
+}
+
+function removeCards(){
+  div = $(".player-cards");
+  div.empty();
+}
+
+function playerCards(arr){
+  div = $(".player-cards")
+  console.log(div)
+  arr.forEach(function(e,i,a){
+    console.log(e)
+    var card = makePlayerCard(e[3],377)
+    div.append(card)
+  })
+}
+
+function makePlayerCard(name,id){
+  var html = 
+  "<div class='player-card'>" +
+    "<img id='prof-pic' src='http://stats.nba.com/media/players/230x185/"+id+".png'>" +
+    "<h1>" + name + "</h1>" +
+    "<div class='stats'>" +
+      "<h3>Pts: </h3>" +
+      "<h3 class='pts'>12</h3>" +
+      "<h3>Reb: </h3>" +
+      "<h3 class='reb'>5.4</h3>" +
+      "<h3>Asst: </h3>"
+      "<h3 class='asst'>18.2</h3>" +
+    "</div>" +
+  "</div>" 
+
+  return html
 }
 
 // Create a new circle and then have dragging() handle the rest of the math for 
@@ -352,6 +388,8 @@ svg.on("mousedown", function(){
 // Call clear selection when button is clicked.
 d3.select("#clearSelection").on("click", function(d){
   clearSelection();
+  div = $(".player-cards")
+  div.empty()
 })
 
 
