@@ -202,12 +202,7 @@ function dragging(){
   var coords = d3.mouse(this);
   var x = coords[0];
   var y = coords[1];
-
-  var circle = svg.select(".selection"); // Circle element that we will get and alter attributes from
   var r = selectionRadius
-  circle.attr("cx", x);
-  circle.attr("cy", y);
-  circle.attr("r",r)
 
   // Get all hexes, see if they are within a radius of the circle, color them if they are
   var hexs = d3.selectAll(".hexagon").filter(function(d){
@@ -326,22 +321,6 @@ function plotShots(svg, season) {
 
   //   }
 }
-
-// Create a new circle and then have dragging() handle the rest of the math for 
-// selecting hexbins
-svg.on("mousedown", function(){
-  svg.select(".selection").remove();
-  var coords = d3.mouse(this);
-  var x = coords[0];
-  var y = coords[1];
-
-  svg.append("circle")
-    .attr("cx", x)
-    .attr("cy", y)
-    .attr("r", selectionRadius)
-    .attr("class", "selection")
-    .style("opacity",0)
-})
 
 // Call clear selection when button is clicked.
 d3.select("#clearSelection").on("click", function(d){
