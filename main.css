@@ -3,7 +3,7 @@ body{
 	display: inline;
 }
 div{
-	margin: 30px;
+
 }
 body{
 	font-family: "Open Sans";
@@ -36,34 +36,91 @@ svg{
 }
 
 .player-card{
-	width: 250px;
 	background-color: grey;
 	border: solid;
-	border-radius: 2px;
-	padding: 10px;
+	border-radius: 5px;
+	padding: 5px;
 	text-align: center;
+	margin: 10px;
 }
 
-#prof-pic{
+.player-card img{
 	width: 100%;
-	border: solid;
-	background-color: white
-}
-
-.stats h3{
-	display: inline
-}
-
-.team img{
-	position: fixed;
-	width: 6%;
-	left: 5px;
-	top: 0;
 }
 
 .player-cards{
+	background-color: red;
 	float: right;
+	width: 800px;
 	height: 800px;
 	overflow: scroll;
+}
+
+
+.flip-container {
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -o-perspective: 1000;
+  perspective: 1000;
+
+	border: 1px solid #ccc;
+}
+
+	.flip-container:hover .flipper,  
+  .flip-container.hover .flipper {
+		-webkit-transform: rotateY(180deg);
+		-moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+		transform: rotateY(180deg);
+	}
+
+.flip-container, .front, .back {
+	width: 320px;
+	height: 320px;
+}
+
+.flipper {
+	-webkit-transition: 0.6s;
+	-webkit-transform-style: preserve-3d;
+
+	-moz-transition: 0.6s;
+	-moz-transform-style: preserve-3d;
+  
+  -o-transition: 0.6s;
+	-o-transform-style: preserve-3d;
+
+	transition: 0.6s;
+	transform-style: preserve-3d;
+
+	position: relative;
+}
+
+.front, .back {
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+	backface-visibility: hidden;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.front {
+	z-index: 2;
+}
+
+.back {
+	-webkit-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+	transform: rotateY(180deg);
+
+	background: #f8f8f8;
+}
+
+.front .name {
+	font-size: 2em;
+	font-weight: bolder;
 }
 

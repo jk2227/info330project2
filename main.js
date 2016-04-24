@@ -209,7 +209,6 @@ function dragging(d){
     var distance = Math.sqrt(Math.pow((hexX - cx),2) + Math.pow((hexY - cy),2))
 
     if (distance <= r){
-      playerCards(d)
       hex.style("fill", "black")
       selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
     }
@@ -329,8 +328,7 @@ function plotShots(svg, season) {
       })
     }
     else{
-      removeCards()
-      playerCards(d)
+      addPlayerCards(d)
       d3.select(this).style("fill", "rgb(0, 0, 0)")
     }
   })
@@ -339,7 +337,7 @@ function plotShots(svg, season) {
 
 // Create a new circle and then have dragging() handle the rest of the math for 
 // selecting hexbins
-svg.on("mousedown", function(){
+/*svg.on("mousedown", function(){
   svg.select(".selection").remove();
   var coords = d3.mouse(this);
   var x = coords[0];
@@ -351,13 +349,12 @@ svg.on("mousedown", function(){
     .attr("class", "selection")
     .style("opacity",0)
 
-})
+})*/
 
 // Call clear selection when button is clicked.
 d3.select("#clearSelection").on("click", function(d){
   clearSelection();
-  div = $(".player-cards")
-  div.empty()
+  removeCards()
 })
 
 
