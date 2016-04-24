@@ -10,8 +10,8 @@ function drawCourt(svg, tutorial) {
     .attr("cy", yScale(0))
     .attr("r", (xScale(7.5) - xScale(0)))
     .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("stroke-width",1);
+    .attr("stroke", "#b30000")
+    .attr("stroke-width",2);
   
   //backboard
   svg.append("line")
@@ -19,8 +19,8 @@ function drawCourt(svg, tutorial) {
     .attr("y1", yScale(-7.5))
     .attr("x2", xScale(-30) + (xScale(60) - xScale(0)))
     .attr("y2", yScale(-7.5))
-    .style("stroke-width",2)
-    .style("stroke", "black");
+    .style("stroke-width",4)
+    .style("stroke", "rgb(0, 0, 0)");
 
   //the paint...
   //outer box
@@ -29,7 +29,9 @@ function drawCourt(svg, tutorial) {
     .attr("y",yScale(-47.5+190))
     .attr("width",xScale(160) - xScale(0))
     .attr("height",yScale(0) - yScale(190))
-    .attr("fill", "none").attr("stroke", "black");
+    .attr("fill", "none")
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //inner box
   svg.append("rect")
@@ -38,7 +40,8 @@ function drawCourt(svg, tutorial) {
     .attr("width", xScale(120) - xScale(0))
     .attr("height", yScale(0) - yScale(190))
     .attr("fill", "none")
-    .attr("stroke", "black");
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //3 point line; left corner
   svg.append("line")
@@ -46,8 +49,8 @@ function drawCourt(svg, tutorial) {
     .attr("y1", yScale(-47.5+140))
     .attr("x2", xScale(-220))
     .attr("y2", yScale(-47.5+140) + (yScale(0) - yScale(140)))
-    .style("stroke-width",2)
-    .style("stroke", "black");
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //3 point line; right side
   svg.append("line")
@@ -55,8 +58,8 @@ function drawCourt(svg, tutorial) {
     .attr("y1", yScale(-47.5+140))
     .attr("x2", xScale(220))
     .attr("y2", yScale(-47.5+140) + (yScale(0) - yScale(140)))
-    .style("stroke-width",2)
-    .style("stroke", "black");
+    .style("stroke-width",3)
+    .style("stroke", "white");
   
   //out of bounds lines for the court 
   svg.append("rect")
@@ -65,7 +68,8 @@ function drawCourt(svg, tutorial) {
     .attr("width", xScale(500) - xScale(0))
     .attr("height", yScale(0) - yScale(470))
     .attr("fill", "none")
-    .attr("stroke", "black");
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //drawing the arcs! 
 
@@ -79,8 +83,9 @@ function drawCourt(svg, tutorial) {
   svg.append("path")
     .attr("d", arc_restricted)
     .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("transform", "translate("+xScale(0)+","+yScale(0)+")");
+    .attr("transform", "translate("+xScale(0)+","+yScale(0)+")")
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //this is the arc on top of the free throw line
   var arc_top_ft = d3.svg.arc()
@@ -92,8 +97,9 @@ function drawCourt(svg, tutorial) {
   svg.append("path")
     .attr("d", arc_top_ft)
     .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("transform", "translate("+xScale(0)+","+yScale(142.5)+")");
+    .attr("transform", "translate("+xScale(0)+","+yScale(142.5)+")")
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //this is the arc on the bottom of the free throw line
   var arc_bottom_ft = d3.svg.arc()
@@ -106,8 +112,9 @@ function drawCourt(svg, tutorial) {
     .attr("d", arc_bottom_ft)
     .style("stroke-dasharray", ("5, 10"))
     .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("transform", "translate("+xScale(0)+","+yScale(142.5)+")");
+    .attr("transform", "translate("+xScale(0)+","+yScale(142.5)+")")
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //this is the arc marking the rest of the 3 point line
   var arc_three = d3.svg.arc()
@@ -119,10 +126,10 @@ function drawCourt(svg, tutorial) {
   svg.append("path")
     .attr("d", arc_three)
     .attr("fill", "none")
-    .attr("stroke", "black")
+    .attr("stroke", "rgb(0, 0, 0)")
     .attr("transform", "translate("+xScale(0)+","+yScale(0)+")")
-    .style("stroke-width",2)
-    .style("stroke", "black");
+    .style("stroke-width",3)
+    .style("stroke", "white");
 
   //if the tutorial is 1, we add labels to the different regions
   //of the court 
@@ -183,36 +190,45 @@ function drawCourt(svg, tutorial) {
 
 } 
 var drag = d3.behavior.drag()
-  .on("drag", dragging);
+  .on("drag", dragging)
+  .on("dragstart", dragging);
+
+var selectionRadius = 7.5;
+d3.select("#selectionRadius").node().value = selectionRadius;
 
 // Function that is called every time the mouse is dragged
-function dragging(d){
+function dragging(){
   // Mouse coords to calculate circle radius
   var coords = d3.mouse(this);
   var x = coords[0];
   var y = coords[1];
-
-  var circle = svg.select(".selection"); // Circle element that we will get and alter attributes from
-  var cx = circle.attr("cx");
-  var cy = circle.attr("cy");
-  var r = Math.max(Math.sqrt(Math.pow(x - circle.attr("cx"), 2) 
-    + Math.pow(y - circle.attr("cy"),2)), 10) // Distance formula
-
-
-  circle.attr("r",r)
+  var r = selectionRadius
 
   // Get all hexes, see if they are within a radius of the circle, color them if they are
   var hexs = d3.selectAll(".hexagon").filter(function(d){
     var hex = d3.select(this);
     var hexX = d3.transform(hex.attr("transform")).translate[0];
     var hexY = d3.transform(hex.attr("transform")).translate[1];
-    var distance = Math.sqrt(Math.pow((hexX - cx),2) + Math.pow((hexY - cy),2))
+    var distance = Math.sqrt(Math.pow((hexX - x),2) + Math.pow((hexY - y),2))
 
     if (distance <= r){
-      hex.style("fill", "black")
-      selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
+      var selectionType = parseInt(d3.select('input[name="selectionType"]:checked').node().value)
+
+      if (!Boolean(selectionType)){
+        if (hex.style("fill") != "rgb(0, 0, 0)"){
+          hex.style("fill", "rgb(0, 0, 0)")
+          selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
+        }
+      }
+      else{
+        hex.style("fill", "white")
+        hex.data()[0].forEach(function(shot){
+          i = selectedShots.indexOf(shot)
+          i >= 0 && selectedShots.splice(i,1) //if shot exists, remove it from selected shots
+        })
+      } 
     }
-  })      
+  })  
 }
 
 // clears selected list and resets the colors of the hexes
@@ -220,18 +236,12 @@ function clearSelection(){
   selectedShots = [];
   d3.selectAll(".hexagon").filter(function(d){
     var hex = d3.select(this);
-    hex.style("fill", function(d){
-        var makes = 0.;
-        d.forEach(function(shot){
-          makes += shot[2];
-        })
-        return color(makes/d.length)
-      })
+    hex.style("fill", "white")
   })
 }
 
-var height = 800;
-var width = 800;
+var height = 600;
+var width = 600;
 var svg = d3.select("#court_area")
   .attr("height", height)
   .attr("width", width)
@@ -246,7 +256,7 @@ var xScale = d3.scale.linear()
 
 var yScale = d3.scale.linear()
   .domain([-50, 470])
-  .range([height - padding, 0]);
+  .range([height - 2*padding, 0]);
 
 drawCourt(svg, 0);
 
@@ -257,17 +267,20 @@ var players_map;
 // Color scale for hexes
 var color = d3.scale.linear()
     .domain([0, 1])
-    .range(["orange", "steelblue"])
+    .range(["red", "steelblue"])
     .interpolate(d3.interpolateLab);
 
 var hexbin = d3.hexbin()
-    .radius(5)
+    .radius(7.5)
 
 // Import all data from the json
 d3.json("dictionary.json", function(error, result) { 
-
       season_players_map = JSON.parse(result);
-      plotShots(svg, "2015-16");
+
+      // Loop through each year and add an option to the selection tab
+      Object.keys(season_players_map).sort().forEach(function(year){
+        d3.select('#years').append("option").attr("value", year).text(year)
+      });
 });
 
 // Arguments:
@@ -276,82 +289,81 @@ d3.json("dictionary.json", function(error, result) {
 
 //     Creates hexbins using imputed season and global data initialized above.
 //     Creates clicking events for hexbins
-function plotShots(svg, season) {
+function plotShots(svg, season, player=-1) {
   players_map = season_players_map[season];
-  var shots = [];
-  for (var key in players_map) {
-  	if(players_map.hasOwnProperty(key)) {
-  		shots = shots.concat(players_map[key][3])
+
+  if (player == -1){
+    svg.selectAll('.hexagon').remove(); // Remove all existing hexagons
+    var shots = [];
+    for (var key in players_map) {
+    	if(players_map.hasOwnProperty(key)) {
+    		shots = shots.concat(players_map[key][players_map[key].length -1])
+      }
     }
+
+    svg.append("g")
+      .attr("clip-path", "url(#clip)")
+      .selectAll(".hexagon")
+        .data(hexbin(shots))
+      .enter().append("path")
+        .attr("class", "hexagon")
+        .attr("d", hexbin.hexagon(8.5))
+        .attr("transform", function(d) { 
+          return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
+        .style("fill", "white")
+
+  //Keep This for testing hexbins
+    // for(var i = 0; i < shots.length; i++) {
+    //  svg.append("circle")
+    //   .attr("cx",xScale(shots[i][0]))
+    //   .attr("cy",yScale(shots[i][1]))
+    //   .attr("r",.7)
+    //   .attr("fill","rgb(0, 0, 0)")
+    //   .attr('fill-opacity', 1);
+
+    //   }
+  }else{
+    //Disable selection controls
+    // d3.select("#years").attr("disabled", true)
+    // d3.select("#clearSelection").attr("disabled", true)
+
+
+
+    var shots = players_map[player][players_map[player].length -1];
+
+    svg.append("g")
+      .attr("clip-path", "url(#clip)")
+      .selectAll(".hexagon")
+        .data(hexbin(shots))
+      .enter().append("path")
+        .attr("class", "hexagon")
+        .attr("d", hexbin.hexagon(8.5))
+        .attr("transform", function(d) { 
+          return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
+        .style("fill", function(d){
+          makes = 0
+          d.forEach(function(shot){
+            makes += shot[2]/d.length
+          })
+          return color(makes);
+        })
   }
-
-  svg.append("g")
-    .attr("clip-path", "url(#clip)")
-    .selectAll(".hexagon")
-      .data(hexbin(shots))
-    .enter().append("path")
-      .attr("class", "hexagon")
-      .attr("d", hexbin.hexagon(7.5))
-      .attr("transform", function(d) { 
-        return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
-      .style("fill", function(d){ // color hexes based on average shot
-        var makes = 0.;
-        d.forEach(function(shot){
-          makes += shot[2]
-        })
-        return color(makes/d.length)
-      })
-
-//Keep This for testing hexbins
-  // for(var i = 0; i < shots.length; i++) {
-  //  svg.append("circle")
-  //   .attr("cx",xScale(shots[i][0]))
-  //   .attr("cy",yScale(shots[i][1]))
-  //   .attr("r",.7)
-  //   .attr("fill","black")
-  //   .attr('fill-opacity', 1);
-
-  //   }
-
-  // Select or deselect shots if clicked on
-  svg.selectAll(".hexagon").on("mousedown", function(d){
-    if (d3.select(this).style("fill") == "rgb(0, 0, 0)"){
-      d3.select(this).style("fill", function(d){
-        var makes = 0.;
-        d.forEach(function(shot){
-          makes += shot[2]
-          // Remove shots from selected list of shots
-          var index = selectedShots.indexOf(shot);
-          index >= 0 && selectedShots.splice(index,1)
-        })
-        return color(makes/d.length)
-      })
-    }
-    else{
-      d3.select(this).style("fill", "rgb(0, 0, 0)")
-    }
-  })
 }
-
-// Create a new circle and then have dragging() handle the rest of the math for 
-// selecting hexbins
-svg.on("mousedown", function(){
-  svg.select(".selection").remove();
-  var coords = d3.mouse(this);
-  var x = coords[0];
-  var y = coords[1];
-  svg.append("circle")
-    .attr("cx", x)
-    .attr("cy", y)
-    .attr("r", 0)
-    .attr("class", "selection")
-    .style("opacity",0)
-
-})
 
 // Call clear selection when button is clicked.
 d3.select("#clearSelection").on("click", function(d){
   clearSelection();
 })
+
+d3.select("#years").on("change",function(){
+  if (d3.select("#years").node().value != '0'){
+    plotShots(svg, d3.select("#years").node().value );
+  };
+});
+
+d3.select("#selectionRadius").on("input", function(){
+  selectionRadius = d3.select("#selectionRadius").node().value
+  d3.select("#brush").select("circle").attr("r", selectionRadius)
+});
 
 
