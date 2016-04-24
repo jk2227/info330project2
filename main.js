@@ -296,8 +296,8 @@ function plotShots(svg, season, player=-1) {
     svg.selectAll('.hexagon').remove(); // Remove all existing hexagons
     var shots = [];
     for (var key in players_map) {
-    	if(players_map.hasOwnProperty(key)) {
-    		shots = shots.concat(players_map[key][players_map[key].length -1])
+      if(players_map.hasOwnProperty(key)) {
+        shots = shots.concat(players_map[key][players_map[key].length -1])
       }
     }
 
@@ -365,5 +365,4 @@ d3.select("#selectionRadius").on("input", function(){
   selectionRadius = d3.select("#selectionRadius").node().value
   d3.select("#brush").select("circle").attr("r", selectionRadius)
 });
-
 
