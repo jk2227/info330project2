@@ -289,37 +289,59 @@ d3.json("dictionary.json", function(error, result) {
 
 //     Creates hexbins using imputed season and global data initialized above.
 //     Creates clicking events for hexbins
-function plotShots(svg, season) {
-  svg.selectAll('.hexagon').remove(); // Remove all existing hexagons
+function plotShots(svg, season, player=-1) {
   players_map = season_players_map[season];
-  var shots = [];
-  for (var key in players_map) {
-  	if(players_map.hasOwnProperty(key)) {
-  		shots = shots.concat(players_map[key][3])
+
+  if (player == -1){
+    svg.selectAll('.hexagon').remove(); // Remove all existing hexagons
+    var shots = [];
+    for (var key in players_map) {
+    	if(players_map.hasOwnProperty(key)) {
+    		shots = shots.concat(players_map[key][3])
+      }
     }
+
+    svg.append("g")
+      .attr("clip-path", "url(#clip)")
+      .selectAll(".hexagon")
+        .data(hexbin(shots))
+      .enter().append("path")
+        .attr("class", "hexagon")
+        .attr("d", hexbin.hexagon(8.5))
+        .attr("transform", function(d) { 
+          return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
+        .style("fill", "white")
+
+  //Keep This for testing hexbins
+    // for(var i = 0; i < shots.length; i++) {
+    //  svg.append("circle")
+    //   .attr("cx",xScale(shots[i][0]))
+    //   .attr("cy",yScale(shots[i][1]))
+    //   .attr("r",.7)
+    //   .attr("fill","rgb(0, 0, 0)")
+    //   .attr('fill-opacity', 1);
+
+    //   }
+  }else{
+    var shots = players_map[player][3];
+
+    svg.append("g")
+      .attr("clip-path", "url(#clip)")
+      .selectAll(".hexagon")
+        .data(hexbin(shots))
+      .enter().append("path")
+        .attr("class", "hexagon")
+        .attr("d", hexbin.hexagon(8.5))
+        .attr("transform", function(d) { 
+          return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
+        .style("fill", function(d){
+          makes = 0
+          d.forEach(function(shot){
+            makes += shot[2]/d.length
+          })
+          return color(makes);
+        })
   }
-
-  svg.append("g")
-    .attr("clip-path", "url(#clip)")
-    .selectAll(".hexagon")
-      .data(hexbin(shots))
-    .enter().append("path")
-      .attr("class", "hexagon")
-      .attr("d", hexbin.hexagon(8.5))
-      .attr("transform", function(d) { 
-        return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
-      .style("fill", "steelblue")
-
-//Keep This for testing hexbins
-  // for(var i = 0; i < shots.length; i++) {
-  //  svg.append("circle")
-  //   .attr("cx",xScale(shots[i][0]))
-  //   .attr("cy",yScale(shots[i][1]))
-  //   .attr("r",.7)
-  //   .attr("fill","rgb(0, 0, 0)")
-  //   .attr('fill-opacity', 1);
-
-  //   }
 }
 
 // Call clear selection when button is clicked.
