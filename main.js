@@ -221,7 +221,7 @@ function dragging(){
         }
       }
       else{
-        hex.style("fill", "steelblue")
+        hex.style("fill", "white")
         hex.data()[0].forEach(function(shot){
           i = selectedShots.indexOf(shot)
           i >= 0 && selectedShots.splice(i,1) //if shot exists, remove it from selected shots
@@ -236,7 +236,7 @@ function clearSelection(){
   selectedShots = [];
   d3.selectAll(".hexagon").filter(function(d){
     var hex = d3.select(this);
-    hex.style("fill", "steelblue")
+    hex.style("fill", "white")
   })
 }
 
@@ -297,7 +297,7 @@ function plotShots(svg, season, player=-1) {
     var shots = [];
     for (var key in players_map) {
     	if(players_map.hasOwnProperty(key)) {
-    		shots = shots.concat(players_map[key][3])
+    		shots = shots.concat(players_map[key][players_map[key].length -1])
       }
     }
 
@@ -323,7 +323,13 @@ function plotShots(svg, season, player=-1) {
 
     //   }
   }else{
-    var shots = players_map[player][3];
+    //Disable selection controls
+    // d3.select("#years").attr("disabled", true)
+    // d3.select("#clearSelection").attr("disabled", true)
+
+
+
+    var shots = players_map[player][players_map[player].length -1];
 
     svg.append("g")
       .attr("clip-path", "url(#clip)")
@@ -355,9 +361,9 @@ d3.select("#years").on("change",function(){
   };
 });
 
-d3.select("#selectionRadius").on("change", function(){
+d3.select("#selectionRadius").on("input", function(){
   selectionRadius = d3.select("#selectionRadius").node().value
-  //d3.select("#selectedRadius").text(selectionRadius)
+  d3.select("#brush").select("circle").attr("r", selectionRadius)
 });
 
 
