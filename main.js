@@ -189,6 +189,8 @@ function drawCourt(svg, tutorial) {
   }
 
 } 
+var percentFormat = d3.format(".3n")
+
 var drag = d3.behavior.drag()
   .on("drag", dragging)
   .on("dragstart", dragging);
@@ -199,36 +201,38 @@ d3.select("#selectionRadius").node().value = selectionRadius;
 // Function that is called every time the mouse is dragged
 function dragging(){
   // Mouse coords to calculate circle radius
-  var coords = d3.mouse(this);
-  var x = coords[0];
-  var y = coords[1];
-  var r = selectionRadius
+  if (!playerHeatMap){
+    var coords = d3.mouse(this);
+    var x = coords[0];
+    var y = coords[1];
+    var r = selectionRadius
 
-  // Get all hexes, see if they are within a radius of the circle, color them if they are
-  var hexs = d3.selectAll(".hexagon").filter(function(d){
-    var hex = d3.select(this);
-    var hexX = d3.transform(hex.attr("transform")).translate[0];
-    var hexY = d3.transform(hex.attr("transform")).translate[1];
-    var distance = Math.sqrt(Math.pow((hexX - x),2) + Math.pow((hexY - y),2))
+    // Get all hexes, see if they are within a radius of the circle, color them if they are
+    var hexs = d3.selectAll(".hexagon").filter(function(d){
+      var hex = d3.select(this);
+      var hexX = d3.transform(hex.attr("transform")).translate[0];
+      var hexY = d3.transform(hex.attr("transform")).translate[1];
+      var distance = Math.sqrt(Math.pow((hexX - x),2) + Math.pow((hexY - y),2))
 
-    if (distance <= r){
-      var selectionType = parseInt(d3.select('input[name="selectionType"]:checked').node().value)
+      if (distance <= r){
+        var selectionType = parseInt(d3.select('input[name="selectionType"]:checked').node().value)
 
-      if (!Boolean(selectionType)){
-        if (hex.style("fill") != "rgb(0, 0, 0)"){
-          hex.style("fill", "rgb(0, 0, 0)")
-          selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
+        if (!Boolean(selectionType)){
+          if (hex.style("fill") != "rgb(0, 0, 0)"){
+            hex.style("fill", "rgb(0, 0, 0)")
+            selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
+          }
         }
+        else{
+          hex.style("fill", "white")
+          hex.data()[0].forEach(function(shot){
+            i = selectedShots.indexOf(shot)
+            i >= 0 && selectedShots.splice(i,1) //if shot exists, remove it from selected shots
+          })
+        } 
       }
-      else{
-        hex.style("fill", "white")
-        hex.data()[0].forEach(function(shot){
-          i = selectedShots.indexOf(shot)
-          i >= 0 && selectedShots.splice(i,1) //if shot exists, remove it from selected shots
-        })
-      } 
-    }
-  })  
+    })  
+  }
 }
 
 // clears selected list and resets the colors of the hexes
@@ -263,6 +267,7 @@ drawCourt(svg, 0);
 // Initialized season players map and players map
 var season_players_map;
 var players_map;
+var playerHeatMap = false;
 
 // Color scale for hexes
 var color = d3.scale.linear()
@@ -291,6 +296,7 @@ d3.json("dictionary.json", function(error, result) {
 //     Creates clicking events for hexbins
 function plotShots(svg, season, player=-1) {
   players_map = season_players_map[season];
+  //color.domain([0, 1])
 
   if (player == -1){
     svg.selectAll('.hexagon').remove(); // Remove all existing hexagons
@@ -323,20 +329,18 @@ function plotShots(svg, season, player=-1) {
 
     //   }
   }else{
-    //Disable selection controls
-    // d3.select("#years").attr("disabled", true)
-    // d3.select("#clearSelection").attr("disabled", true)
-
-
-
     var shots = players_map[player][players_map[player].length -1];
+
+    d3.selectAll(".hexagon").style("opacity",0)
+    d3.selectAll(".player").remove()
+    playerHeatMap = true;
 
     svg.append("g")
       .attr("clip-path", "url(#clip)")
       .selectAll(".hexagon")
         .data(hexbin(shots))
       .enter().append("path")
-        .attr("class", "hexagon")
+        .attr("class", "hexagon player")
         .attr("d", hexbin.hexagon(8.5))
         .attr("transform", function(d) { 
           return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
@@ -347,7 +351,63 @@ function plotShots(svg, season, player=-1) {
           })
           return color(makes);
         })
+
+    svg.selectAll(".hexagon").filter(function(d){
+      makes = 0
+          d.forEach(function(shot){
+            makes += shot[2]/d.length
+          })
+
+      var hex = d3.select(this);
+      var hexX = d3.transform(hex.attr("transform")).translate[0];
+      var hexY = d3.transform(hex.attr("transform")).translate[1];
+
+      svg.append("text")
+        .attr("x",hexX)
+        .attr("y",hexY+3)
+        .attr("class", "percent")
+        .text((percentFormat(makes*100)))
+        .style("text-anchor", "middle")
+        .style("font-size", "6px")
+        .style("font-weight", "1000")
+    })
+
+    svg.selectAll(".percent").on("mouseover", function(d){
+      d3.select(this).style("font-size", "20px")
+      var x = d3.select(this).attr("x")
+      var y = d3.select(this).attr("y")
+      hexs = d3.selectAll(".hexagon").filter(function(h){
+        var hex = d3.select(this);
+        if (hex){
+          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y) - 3))
+        }
+      })
+      .attr("d", hexbin.hexagon(20))
+    })
+    svg.selectAll(".percent").on("mouseout", function(d){
+      d3.select(this).style("font-size", "6px")
+      var x = d3.select(this).attr("x")
+      var y = d3.select(this).attr("y")
+      hexs = d3.selectAll(".hexagon").filter(function(h){
+        var hex = d3.select(this);
+        if (hex){
+          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y) - 3))
+        }
+      })
+      .attr("d", hexbin.hexagon(8.5))
+    })
+
+    d3.select("#clearPlayer").style("visibility", "visible")
   }
+}
+
+function clearPlayerHexes(){
+  d3.selectAll(".player").remove()
+  d3.selectAll(".percent").remove()
+  d3.selectAll(".hexagon").style("opacity",.6)
+  d3.select("#clearPlayer").style("visibility", "hidden")
+
+  playerHeatMap = false;
 }
 
 // Call clear selection when button is clicked.
@@ -365,4 +425,8 @@ d3.select("#selectionRadius").on("input", function(){
   selectionRadius = d3.select("#selectionRadius").node().value
   d3.select("#brush").select("circle").attr("r", selectionRadius)
 });
+
+d3.select("#clearPlayer").on("click", function(){
+  clearPlayerHexes();
+})
 
