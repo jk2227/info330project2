@@ -116,7 +116,7 @@ svg{
   -o-transform: rotateY(180deg);
 	transform: rotateY(180deg);
 
-	background: #f8f8f8;
+	background: black;
 }
 
 .front .name {
