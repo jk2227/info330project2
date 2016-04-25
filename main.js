@@ -233,6 +233,7 @@ function dragging(){
 
 // clears selected list and resets the colors of the hexes
 function clearSelection(){
+  removeCards();
   selectedShots = [];
   d3.selectAll(".hexagon").filter(function(d){
     var hex = d3.select(this);
