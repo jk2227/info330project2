@@ -50,10 +50,6 @@ svg{
 
 .player-cards{
 	background-color: red;
-	float: right;
-	width: 800px;
-	height: 800px;
-	overflow: scroll;
 }
 
 
@@ -75,8 +71,8 @@ svg{
 	}
 
 .flip-container, .front, .back {
-	width: 320px;
-	height: 320px;
+	width: 250px;
+	height: 250px;
 }
 
 .flipper {

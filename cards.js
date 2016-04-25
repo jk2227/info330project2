@@ -3,7 +3,7 @@ $(".player-cards").isotope({
   layoutMode: 'fitRows',
   getSortData : {
       attempts : function ( elem ) {
-        return parseInt( $(elem).find('#attempts').text(), 10 );
+        return parseFloat( $(elem).find('#attempts').text(), 10 );
       },
       made : function ( elem ) {
         return parseFloat( $(elem).find('#made').text() );
@@ -39,6 +39,7 @@ function sort(opt){
 }
 
 function makePlayerCard(name,id,shots,attempts){
+  var totalShots = players_map[id][6].length;
   var elem = document.createElement('div');
   elem.innerHTML = 
   "<div class='flip-container player-card' id='"+id+"' ontouchstart='this.classList.toggle('hover');''>"+
@@ -49,10 +50,10 @@ function makePlayerCard(name,id,shots,attempts){
       "</div>" + 
       "<div class='back'>" + 
         "<div class='stats'>"+
-          "<p>Shots Attempted: </p>" +
-          "<p id='attempts'>" + attempts + "</p>" + 
-          "<p>Shots made: </p>" + 
-          "<p id='made'>" + shots + "</p>" + 
+          "<p>Likelihood of player shooting from selected area:</p>" +
+          "<p id='attempts'>" + (attempts/totalShots*100).toFixed(2) + "%</p>" + 
+          "<p>Field Goal % in selected region:</p>" + 
+          "<p id='made'>" + (shots/attempts*100).toFixed(2) + "%</p>" + 
         "</div>" + 
         "<div class='buttons'>"+
           "" + 
