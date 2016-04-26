@@ -14,8 +14,6 @@ u_a = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML
 #seasons= ['','2011-12', '2012-13', '2013-14', '2014-15', '2015-16']
 season_players_map = getAllStars()
 
-
-temp = ['2015-16']
 shots = {} 
 for season in season_players_map.keys():
     print season 
