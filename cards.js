@@ -2,11 +2,20 @@ $(".player-cards").isotope({
   itemSelector: '.player-card',
   layoutMode: 'fitRows',
   getSortData : {
-      attempts : function ( elem ) {
-        return parseFloat( $(elem).find('#attempts').text(), 10 );
+      area_odds : function ( elem ) {
+        return parseFloat( $(elem).find('#area_odds').text(), 10 );
       },
-      made : function ( elem ) {
-        return parseFloat( $(elem).find('#made').text() );
+      area_fg : function ( elem ) {
+        return parseFloat( $(elem).find('#area_fg').text() );
+      },
+      season_pts : function ( elem ) {
+        return parseFloat( $(elem).find('#season_pts').text() );
+      },
+      season_rbds : function ( elem ) {
+        return parseFloat( $(elem).find('#season_rbds').text() );
+      },
+      season_assts : function ( elem ) {
+        return parseFloat( $(elem).find('#season_assts').text() );
       }
     }
 })
@@ -40,27 +49,32 @@ function sort(opt){
 
 function makePlayerCard(name,id,shots,attempts){
   var totalShots = players_map[id][6].length;
+  var season_pts = players_map[id][5];
+  var season_rbds = players_map[id][3];
+  var season_assts = players_map[id][4];
+  var area_fg = (shots/attempts * 100).toFixed(4);
+  var area_odds = (attempts/totalShots * 100).toFixed(4);
   var elem = document.createElement('div');
   elem.innerHTML = 
-  "<div class='flip-container player-card' id='"+id+"' ontouchstart='this.classList.toggle('hover');''>"+
-    "<div class='flipper'>" + 
-      "<div class='front' >" + 
+"<div class='flip-container player-card' ontouchstart='this.classList.toggle('hover');'>" +
+    "<div class='flipper'>" +
+      "<div class='front' >" +
         "<img src='http://stats.nba.com/media/players/230x185/"+id+".png'>"+
-        "<span class='name'>"+name + "</span>" + 
-      "</div>" + 
-      "<div class='back'>" + 
-        "<div class='stats'>"+
-          "<p>Likelihood of player shooting from selected area:</p>" +
-          "<p id='attempts'>" + (attempts/totalShots*100).toFixed(2) + "%</p>" + 
-          "<p>Field Goal % in selected region:</p>" + 
-          "<p id='made'>" + (shots/attempts*100).toFixed(2) + "%</p>" + 
-        "</div>" + 
-        "<div class='buttons'>"+
-          "" + 
-        "</div>" + 
-      "</div>" + 
-    "</div>" + 
-  "</div>"; 
+        "<span class='name'>"+name+"</span>" +
+      "</div>" +
+      "<div class='back'>" +
+        "<div class='stats'>" +
+          "<h3>Season Stats</h3>" +
+          "<p>PTS: <span id='season_pts'>"+season_pts+"</span> RBDS: <span id='season_rbds'>"+season_rbds+"</span> ASSTS: <span id='season_assts'>"+season_assts+"</span></p>" +
+          "<h3>Selected Area Stats</h3>" +
+          "<p>Shot Odds: <span id='area_odds'>"+area_odds+"%</span> FG%: <span id='area_fg'>"+area_fg+"%</span></p>" +
+        "</div>" +
+        "<div class='buttons'>" +
+          "<button type='button' id='makeCards' onclick='heatmap(player)'>Full Season Heatmap</button>" +
+        "</div>" +
+      "</div>" +
+    "</div>" +
+"</div>"
 
 
   return elem
