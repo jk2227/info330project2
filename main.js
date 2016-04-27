@@ -271,8 +271,8 @@ var playerHeatMap = false;
 
 // Color scale for hexes
 var color = d3.scale.linear()
-    .domain([0, 1])
-    .range(["red", "steelblue"])
+    .domain([0,.5, 1])
+    .range(["red","yellow", "steelblue"])
     .interpolate(d3.interpolateLab);
 
 var hexbin = d3.hexbin()
@@ -331,6 +331,9 @@ function plotShots(svg, season, player=-1) {
   }else{
     var shots = players_map[player][players_map[player].length -1];
 
+    var percentMade = season_players_map[season][player][2]
+    color.domain([0,percentMade,1]);
+
     d3.selectAll(".hexagon").style("opacity",0)
     d3.selectAll(".player").remove()
     playerHeatMap = true;
@@ -352,11 +355,11 @@ function plotShots(svg, season, player=-1) {
           return color(makes);
         })
 
-    svg.selectAll(".hexagon").filter(function(d){
+    svg.selectAll(".player").filter(function(d){
       makes = 0
-          d.forEach(function(shot){
-            makes += shot[2]/d.length
-          })
+      d.forEach(function(shot){
+        makes += shot[2]/d.length
+      })
 
       var hex = d3.select(this);
       var hexX = d3.transform(hex.attr("transform")).translate[0];
@@ -364,37 +367,53 @@ function plotShots(svg, season, player=-1) {
 
       svg.append("text")
         .attr("x",hexX)
-        .attr("y",hexY+3)
+        .attr("y",hexY)
+        .attr("dy", 2)
         .attr("class", "percent")
-        .text((percentFormat(makes*100)))
+        .text((percentFormat(makes*100)) + "%")
         .style("text-anchor", "middle")
-        .style("font-size", "6px")
+        .style("font-size", "4px")
         .style("font-weight", "1000")
     })
 
+    // Make percent and hex bigger on hover
     svg.selectAll(".percent").on("mouseover", function(d){
-      d3.select(this).style("font-size", "20px")
       var x = d3.select(this).attr("x")
       var y = d3.select(this).attr("y")
       hexs = d3.selectAll(".hexagon").filter(function(h){
+        d3.select(this).style("opacity", .1)
+
         var hex = d3.select(this);
         if (hex){
-          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y) - 3))
+          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y)))
         }
       })
-      .attr("d", hexbin.hexagon(20))
+      .attr("d", hexbin.hexagon(25))
+      .style("opacity","1")
+
+      d3.selectAll(".percent").style("opacity", .1)
+      d3.select(this)
+        .style("font-size", "15px")
+        .style("opacity", 1)
+        .attr("dy", 5)
+
+
     })
     svg.selectAll(".percent").on("mouseout", function(d){
-      d3.select(this).style("font-size", "6px")
+      d3.select(this).style("font-size", "4px").attr("dy", 2)
+      d3.selectAll(".percent").style("opacity", 1)
+
       var x = d3.select(this).attr("x")
       var y = d3.select(this).attr("y")
       hexs = d3.selectAll(".hexagon").filter(function(h){
+        d3.select(this).style("opacity", .6)
         var hex = d3.select(this);
         if (hex){
-          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y) - 3))
+          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y)))
         }
       })
       .attr("d", hexbin.hexagon(8.5))
+      .style("opacity",".6")
     })
 
     d3.select("#clearPlayer").style("visibility", "visible")
