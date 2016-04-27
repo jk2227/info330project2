@@ -1,14 +1,13 @@
 <html>
 <head>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="demo/d3.hexbin.js"></script>
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
+  <script src="demo/d3.hexbin.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="main.css">
 <style>
 
-
-	div { 
-    margin: 30px; 
-  }
   body { 
     font-family: "Open Sans"; 
     background-color: #4d4d4d;
@@ -58,11 +57,16 @@
 <body>
 <h3>Project 2: Insert Title Here</h3>
 <p> Ji Hun Kim (jk2227), Matt White (mpw73), Rudy Winkler (rgw66)</p>
+<div class="sorting">
+  <button type="button" id="makeCards" onclick="sort('made')">Field Goal Percentage in selected area</button><br/>
+  <button type="button" id="makeCards" onclick="sort('attempts')">Likelihood to shoot from selected area</button><br/>
+</div>
 <div class="controls"> 
   <select name="years" id="years">
     <option value="0" selected="selected">-- Select A Year --</option>
   </select><br/>
   <button type="button" id="clearSelection">Clear Selection</button><br/>
+  <button type="button" id="makeCards" onclick="addPlayerCards()">Find Players</button><br/>
 
   <input type="radio" name="selectionType" value="0" checked>Select<br/>
 
@@ -76,7 +80,8 @@
   <button id="clearPlayer" style="visibility: hidden;">Clear Player Shot Chart</button>
 </div>
 <svg id="court_area"></svg>
-<div class="cards"></div>
+<div class="player-cards"></div>
+<script src="cards.js"></script>
 <script src="main.js"></script>
 
 </body>
