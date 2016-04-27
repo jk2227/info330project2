@@ -1,18 +1,45 @@
-body{ 
-	font-family: "Open Sans"; 
-	display: inline;
+body { 
+    font-family: "Open Sans"; 
+    background-color: #4d4d4d;
+    color: white;
+    margin: 0 auto;
+    text-align: center;
+    width: 1200px;
+  }
+#court_area { 
+    display: inline-block;
+    margin: 0px; 
+    background-color: #eee; 
+    background-image: url("court_floor.gif");
+    background-size: 300px 300px;
+    border-radius: 10px;
+    width: 600px;
+  }
+.controls {
+    text-align: center;
+    margin: 0 auto;
+    top:0;
+    width:150px;
+    height: 600px;
+    vertical-align: top;
+    display: inline-block;
+  }
+.bar rect { fill: #ccc; }
+.axis path { fill: none; stroke: black;}
+.axis line { stroke: black; }
+.axis text { font-size: x-small; }
+.hexagon {
+    fill: none;
+    stroke: #4d4d4d;
+    stroke-width: .5px;
+    opacity: .6
 }
-div{
 
-}
-body{
-	font-family: "Open Sans";
-}
-svg{
+/*svg{
 	margin: 20px;
 	background-color: #eee;
 	float: left
-}
+}*/
 .bar rect {
 	fill: #ccc;
 }
@@ -36,12 +63,10 @@ svg{
 }
 
 .player-card{
-	background-color: grey;
-	border: solid;
-	border-radius: 5px;
 	padding: 5px;
 	text-align: center;
-	margin: 10px;
+	margin: 0px auto;
+	display: inline-block;
 }
 
 .player-card img{
@@ -49,17 +74,27 @@ svg{
 }
 
 .player-cards{
-	background-color: red;
+	max-height: 600px;
+	min-height: 600px;
+	overflow: scroll;
+	background-color: #353535;
+	margin: 0 auto;
+    width:300px;
+    height: 600px;
+    vertical-align: top;
+    display: inline-block;
+    border-radius: 10px;
+    border: inset 2px;
 }
 
 
 .flip-container {
-  -webkit-perspective: 1000;
-  -moz-perspective: 1000;
-  -o-perspective: 1000;
-  perspective: 1000;
+	-webkit-perspective: 1000;
+	-moz-perspective: 1000;
+	-o-perspective: 1000;
+	perspective: 1000;
+	left: 20px !important ;
 
-	border: 1px solid #ccc;
 }
 
 	.flip-container:hover .flipper,  
@@ -72,7 +107,7 @@ svg{
 
 .flip-container, .front, .back {
 	width: 250px;
-	height: 250px;
+	height: 300px;
 }
 
 .flipper {
@@ -81,21 +116,23 @@ svg{
 
 	-moz-transition: 0.6s;
 	-moz-transform-style: preserve-3d;
-  
-  -o-transition: 0.6s;
+  	
+  	-o-transition: 0.6s;
 	-o-transform-style: preserve-3d;
 
 	transition: 0.6s;
 	transform-style: preserve-3d;
-
-	position: relative;
 }
 
 .front, .back {
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
 	backface-visibility: hidden;
+
+	background-color: grey;
+	border: solid;
+	border-radius: 10px;
 
 	position: absolute;
 	top: 0;
@@ -104,12 +141,13 @@ svg{
 
 .front {
 	z-index: 2;
+	left: -5px;
 }
 
 .back {
 	-webkit-transform: rotateY(180deg);
 	-moz-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
+	-o-transform: rotateY(180deg);
 	transform: rotateY(180deg);
 
 	background: black;
@@ -119,4 +157,3 @@ svg{
 	font-size: 2em;
 	font-weight: bolder;
 }
-

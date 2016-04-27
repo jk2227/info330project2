@@ -42,7 +42,7 @@ function makePlayerCard(name,id,shots,attempts){
   var totalShots = players_map[id][6].length;
   var elem = document.createElement('div');
   elem.innerHTML = 
-  "<div class='flip-container player-card' id='"+id+"' ontouchstart='this.classList.toggle('hover');''>"+
+  "<div class='flip-container player-card' id='"+id+"' ontouchstart='this.classList.toggle(\"hover\");'>"+
     "<div class='flipper'>" + 
       "<div class='front' >" + 
         "<img src='http://stats.nba.com/media/players/230x185/"+id+".png'>"+
