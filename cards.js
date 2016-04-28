@@ -54,6 +54,8 @@ function makePlayerCard(name,id,shots,attempts){
   var season_assts = players_map[id][4];
   var area_fg = (shots/attempts * 100).toFixed(4);
   var area_odds = (attempts/totalShots * 100).toFixed(4);
+  var season = $("#years").val().toString();
+  console.log(season)
   var elem = document.createElement('div');
   elem.innerHTML = 
 "<div class='flip-container player-card' ontouchstart='this.classList.toggle('hover');'>" +
@@ -70,7 +72,7 @@ function makePlayerCard(name,id,shots,attempts){
           "<p>Shot Odds: <span id='area_odds'>"+area_odds+"%</span> FG%: <span id='area_fg'>"+area_fg+"%</span></p>" +
         "</div>" +
         "<div class='buttons'>" +
-          "<button type='button' id='makeCards' onclick='heatmap(player)'>Full Season Heatmap</button>" +
+          "<button type='button' id='makeCards' onclick='plotShots(svg,\""+season+"\","+id+")'>Full Season Heatmap</button>" +
         "</div>" +
       "</div>" +
     "</div>" +
