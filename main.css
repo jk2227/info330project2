@@ -1,4 +1,5 @@
 body { 
+<<<<<<< HEAD
     font-family: "Open Sans"; 
     background-color: #4d4d4d;
     color: white;
@@ -40,9 +41,82 @@ body {
 	background-color: #eee;
 	float: left
 }*/
+=======
+	font-family: "Open Sans"; 
+	background-color: #4d4d4d;
+	color: white;
+	margin: 0 auto;
+	text-align: center;
+	width: 1200px;
+	display: inline;
+}
+
+#court_area { 
+	display: inline-block;
+	margin: 0px; 
+	background-color: #eee; 
+	background-image: url("court_floor.gif");
+	background-size: 300px 300px;
+	border-radius: 10px;
+	width: 600px;
+}
+
+.controls {
+	text-align: center;
+	margin: 0 auto;
+	top:0;
+	width:150px;
+	height: 600px;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.cards{
+	margin: 0 auto;
+	width:200px;
+	height: 600px;
+	vertical-align: top;
+	display: inline-block
+}
+
 .bar rect {
 	fill: #ccc;
 }
+
+.axis path {
+	fill: none; stroke: black;
+}
+
+.axis line{
+	stroke: black;
+}
+
+.axis text {
+	font-size: x-small;
+}
+
+.dullorange {
+	fill: rgb(255, 167, 94);
+}
+
+.hexagon {
+	fill: none;
+	stroke: #4d4d4d;
+	stroke-width: .5px;
+	opacity: .6
+}
+
+svg{
+	margin: 20px;
+	background-color: #eee;
+	float: left
+}
+
+>>>>>>> 4167d2e04fdfe9ab53093ce71737f9eb229223cc
+.bar rect {
+	fill: #ccc;
+}
+
 .axis path {
 	fill: none; stroke: black;
 }
@@ -54,12 +128,6 @@ body {
 }
 .dullorange {
 	fill: rgb(255, 167, 94);
-}
-.hexagon {
-	fill: none;
-	stroke: #000;
-	stroke-width: .5px;
-	opacity: .7
 }
 
 .player-card{
@@ -157,3 +225,19 @@ body {
 	font-size: 2em;
 	font-weight: bolder;
 }
+<<<<<<< HEAD
+=======
+
+.back p{
+	color: white;
+}
+
+.back span{
+	color: red;
+	font-weight: bolder;
+}
+
+.back h3{
+	color: white;
+}
+>>>>>>> 4167d2e04fdfe9ab53093ce71737f9eb229223cc
