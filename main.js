@@ -1,9 +1,7 @@
 
 //function allows us to draw the court
 //arguments: svg -- the svg object for us to append the court to
-//           tutorial -- 1 if it is supposed to be the court introducting
-//            the different shot regions, 0 otherwise 
-function drawCourt(svg, tutorial) {
+function drawCourt(svg) {
   //basket
   svg.append("circle")
     .attr("cx", xScale(0))
@@ -130,65 +128,10 @@ function drawCourt(svg, tutorial) {
     .attr("transform", "translate("+xScale(0)+","+yScale(0)+")")
     .style("stroke-width",3)
     .style("stroke", "white");
-
-  //if the tutorial is 1, we add labels to the different regions
-  //of the court 
-  if(tutorial == 1) {
-
-    //marking the above the break 3 point line
-    var arc_above_the_break_3 = d3.svg.arc()
-      .innerRadius(352)
-      .outerRadius(372)
-      .startAngle(-69 * (Math.PI/180)) //converting from degs to radians
-      .endAngle(69 * (Math.PI/180)) //just radians
-
-    svg.append("path")
-    .attr("d", arc_above_the_break_3)
-    .attr("fill", "none")
-    .attr("stroke", "red")
-    .attr("transform", "translate("+xScale(1)+","+yScale(0)+")");
-
-    svg.append("text").attr("x",325).attr("y",225).attr("font-size",15).text("Above the Break 3: anywhere beyond here!");
-
-    //marking the restricted area
-    var arc_restricted_label = d3.svg.arc()
-      .innerRadius(70)
-      .outerRadius(90)
-      .startAngle(-90 * (Math.PI/180)) //converting from degs to radians
-      .endAngle(Math.PI/2) //just radians
-
-    svg.append("path")
-    .attr("d", arc_restricted_label)
-    .attr("fill", "none")
-    .attr("stroke", "orange")
-    .attr("transform", "translate("+xScale(0)+","+yScale(0)+")");
-
-    
-    svg.append("text").attr("x",355).attr("y",600).attr("font-size",15).text("Restricted Area: Between this arc and the basket!");
-
-    svg.append("text").attr("x",105).attr("y",600).attr("font-size",15).text("Left Corner 3; behind this line!");
-
-    svg.append("text").attr("x",735).attr("y",600).attr("font-size",15).text("Right Corner 3; behind this line!");
-
-    //marking the paint (non-RA) area
-    svg.append("rect").attr("x", xScale(-80)).attr("y",yScale(-47.5+190)).attr("width",xScale(160) - xScale(0)).attr("height",yScale(0) - yScale(190)).attr("fill", "none").attr("stroke", "blue");
-
-    svg.append("text").attr("x",345).attr("y",450).attr("font-size",15).text("In the Paint (non-RA); in the blue box but not in the arc!");
-
-    svg.append("text").attr("x",325).attr("y",375).attr("font-size",15).text("Mid-Range: in between the 3-pt line but outside the paint!");
-
-    svg.append("text").attr("x",300).attr("y",75).attr("font-size",15).text("This red dot means the shot attempted at this location was not converted!");
-    svg.append("circle").attr("cx",500).attr("cy",100).attr("r",3).attr("fill","red").attr('fill-opacity', 0.2);
-
-    svg.append("text").attr("x",300).attr("y",150).attr("font-size",15).text("This blue dot means the shot attempted at this location was converted!");
-    svg.append("circle").attr("cx",500).attr("cy",175).attr("r",3).attr("fill","blue").attr('fill-opacity', 0.2);
-
-   svg.append("text").attr("x",300).attr("y",25).attr("font-size",15).text("Backcourt: shots attempted from the other half of the court!");
-
-
-  }
-
 } 
+
+var percentFormat = d3.format(".3n")
+
 var drag = d3.behavior.drag()
   .on("drag", dragging)
   .on("dragstart", dragging);
@@ -199,46 +142,38 @@ d3.select("#selectionRadius").node().value = selectionRadius;
 // Function that is called every time the mouse is dragged
 function dragging(){
   // Mouse coords to calculate circle radius
-  var coords = d3.mouse(this);
-  var x = coords[0];
-  var y = coords[1];
-  var r = selectionRadius
+  if (!playerHeatMap){
+    var coords = d3.mouse(this);
+    var x = coords[0];
+    var y = coords[1];
+    var r = selectionRadius
 
-  // Get all hexes, see if they are within a radius of the circle, color them if they are
-  var hexs = d3.selectAll(".hexagon").filter(function(d){
-    var hex = d3.select(this);
-    var hexX = d3.transform(hex.attr("transform")).translate[0];
-    var hexY = d3.transform(hex.attr("transform")).translate[1];
-    var distance = Math.sqrt(Math.pow((hexX - x),2) + Math.pow((hexY - y),2))
+    // Get all hexes, see if they are within a radius of the circle, color them if they are
+    var hexs = d3.selectAll(".hexagon").filter(function(d){
+      var hex = d3.select(this);
+      var hexX = d3.transform(hex.attr("transform")).translate[0];
+      var hexY = d3.transform(hex.attr("transform")).translate[1];
+      var distance = Math.sqrt(Math.pow((hexX - x),2) + Math.pow((hexY - y),2))
 
-    if (distance <= r){
-      var selectionType = parseInt(d3.select('input[name="selectionType"]:checked').node().value)
+      if (distance <= r){
+        var selectionType = parseInt(d3.select('input[name="selectionType"]:checked').node().value)
 
-      if (!Boolean(selectionType)){
-        if (hex.style("fill") != "rgb(0, 0, 0)"){
-          hex.style("fill", "rgb(0, 0, 0)")
-          selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
+        if (!Boolean(selectionType)){
+          if (hex.style("fill") != "rgb(0, 0, 0)"){
+            hex.style("fill", "rgb(0, 0, 0)")
+            selectedShots = selectedShots.concat(hex.data()[0]) //add shots to selected shot list 
+          }
         }
+        else{
+          hex.style("fill", "white")
+          hex.data()[0].forEach(function(shot){
+            i = selectedShots.indexOf(shot)
+            i >= 0 && selectedShots.splice(i,1) //if shot exists, remove it from selected shots
+          })
+        } 
       }
-      else{
-        hex.style("fill", "white")
-        hex.data()[0].forEach(function(shot){
-          i = selectedShots.indexOf(shot)
-          i >= 0 && selectedShots.splice(i,1) //if shot exists, remove it from selected shots
-        })
-      } 
-    }
-  })  
-}
-
-// clears selected list and resets the colors of the hexes
-function clearSelection(){
-  removeCards();
-  selectedShots = [];
-  d3.selectAll(".hexagon").filter(function(d){
-    var hex = d3.select(this);
-    hex.style("fill", "white")
-  })
+    })  
+  }
 }
 
 var height = 600;
@@ -264,11 +199,12 @@ drawCourt(svg, 0);
 // Initialized season players map and players map
 var season_players_map;
 var players_map;
+var playerHeatMap = false;
 
 // Color scale for hexes
 var color = d3.scale.linear()
-    .domain([0, 1])
-    .range(["red", "steelblue"])
+    .domain([0,.5, 1])
+    .range(["red","yellow", "steelblue"])
     .interpolate(d3.interpolateLab);
 
 var hexbin = d3.hexbin()
@@ -282,6 +218,63 @@ d3.json("dictionary.json", function(error, result) {
       Object.keys(season_players_map).sort().forEach(function(year){
         d3.select('#years').append("option").attr("value", year).text(year)
       });
+
+      // create hexes for the legend
+      svg.append("g").append("path")
+        .attr("clip-path", "url(#clip)")
+        .attr("class", "legend")
+        .attr("d", hexbin.hexagon(8.5))
+        .attr("transform", function(d) { 
+          return "translate(" + xScale(-250) + "," + yScale(-65) + ")"; })
+        .style("fill", "red")
+        .style("stroke", "black")
+        .style("stroke-width", "1px")
+        .style("opacity", ".7")
+
+      svg.append("text")
+        .attr("x",xScale(-240))
+        .attr("y",yScale(-70))
+        .attr("class", "legend")
+        .text("- 0% Shots Made")
+
+      svg.append("g").append("path")
+        .attr("clip-path", "url(#clip)")
+        .attr("class", "legend")
+        .attr("d", hexbin.hexagon(8.5))
+        .attr("transform", function(d) { 
+          return "translate(" + xScale(-70) + "," + yScale(-65) + ")"; })
+        .style("fill", "yellow")
+        .style("stroke", "black")
+        .style("stroke-width", "1px")
+        .style("opacity", ".7")
+
+      svg.append("text")
+        .attr("x",xScale(-60))
+        .attr("y",yScale(-70))
+        .attr("class", "legend")
+        .text("- Season FG Average")
+
+
+      svg.append("g").append("path")
+        .attr("clip-path", "url(#clip)")
+        .attr("class", "legend")
+        .attr("d", hexbin.hexagon(8.5))
+        .attr("transform", function(d) { 
+          return "translate(" + xScale(120) + "," + yScale(-65) + ")"; })
+        .style("fill", "steelblue")
+        .style("stroke", "black")
+        .style("stroke-width", "1px")
+        .style("opacity", ".7")
+
+      svg.append("text")
+        .attr("x",xScale(130))
+        .attr("y",yScale(-70))
+        .attr("class", "legend")
+        .text("- 100% Shots Made")
+
+
+      svg.selectAll(".legend").style("opacity", 0)
+
 });
 
 // Arguments:
@@ -313,31 +306,25 @@ function plotShots(svg, season, player=-1) {
           return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
         .style("fill", "white")
 
-  //Keep This for testing hexbins
-    // for(var i = 0; i < shots.length; i++) {
-    //  svg.append("circle")
-    //   .attr("cx",xScale(shots[i][0]))
-    //   .attr("cy",yScale(shots[i][1]))
-    //   .attr("r",.7)
-    //   .attr("fill","rgb(0, 0, 0)")
-    //   .attr('fill-opacity', 1);
-
-    //   }
   }else{
-    //Disable selection controls
-    // d3.select("#years").attr("disabled", true)
-    // d3.select("#clearSelection").attr("disabled", true)
-
-
-
+    clearPlayerHexes(); // remove current player hexes if any
     var shots = players_map[player][players_map[player].length -1];
+
+    svg.selectAll(".legend").style("opacity", 1) // unhide legend
+
+    var percentMade = season_players_map[season][player][2]
+    color.domain([0,percentMade,1]);
+
+    d3.selectAll(".hexagon").style("opacity",0) // hide all hexes
+    //d3.selectAll(".player").remove() // remove current player
+    playerHeatMap = true;
 
     svg.append("g")
       .attr("clip-path", "url(#clip)")
       .selectAll(".hexagon")
         .data(hexbin(shots))
       .enter().append("path")
-        .attr("class", "hexagon")
+        .attr("class", "hexagon player")
         .attr("d", hexbin.hexagon(8.5))
         .attr("transform", function(d) { 
           return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")"; })
@@ -348,22 +335,118 @@ function plotShots(svg, season, player=-1) {
           })
           return color(makes);
         })
+
+    svg.selectAll(".player").filter(function(d){
+      makes = 0
+      d.forEach(function(shot){
+        makes += shot[2]/d.length
+      })
+
+      var hex = d3.select(this);
+      var hexX = d3.transform(hex.attr("transform")).translate[0];
+      var hexY = d3.transform(hex.attr("transform")).translate[1];
+
+      svg.append("text")
+        .attr("x",hexX)
+        .attr("y",hexY)
+        .attr("dy", 2)
+        .attr("class", "percent")
+        .text((percentFormat(makes*100)) + "%")
+        .style("text-anchor", "middle")
+        .style("font-size", "4px")
+        .style("font-weight", "1000")
+    })
+
+    // Make percent and hex bigger on hover
+    svg.selectAll(".percent").on("mouseover", function(d){
+      var x = d3.select(this).attr("x")
+      var y = d3.select(this).attr("y")
+      hexs = d3.selectAll(".player").filter(function(h){ 
+      // iterate through all player hexes and see if they are hovered over 
+        d3.select(this).style("opacity", .1)
+
+        var hex = d3.select(this);
+        if (hex){
+          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) 
+          && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y)))
+        }
+      })
+      .attr("d", hexbin.hexagon(25))
+      .style("opacity","1")
+
+      // make other hexes dim so you can see the hover
+      d3.selectAll(".percent").style("opacity", .1)
+      d3.select(this)
+        .style("font-size", "15px")
+        .style("opacity", 1)
+        .attr("dy", 5)
+
+
+    })
+    // return everything to normal on mouseout
+    svg.selectAll(".percent").on("mouseout", function(d){
+      d3.select(this).style("font-size", "4px").attr("dy", 2)
+      d3.selectAll(".percent").style("opacity", 1)
+
+      var x = d3.select(this).attr("x")
+      var y = d3.select(this).attr("y")
+      hexs = d3.selectAll(".player").filter(function(h){
+        d3.select(this).style("opacity", .6)
+        var hex = d3.select(this);
+        if (hex){
+          return (d3.transform(hex.attr("transform")).translate[0] == parseFloat(x)) && (d3.transform(hex.attr("transform")).translate[1] == (parseFloat(y)))
+        }
+      })
+      .attr("d", hexbin.hexagon(8.5))
+      .style("opacity",".6")
+    })
+
+    d3.select("#clearPlayer").style("visibility", "visible")
   }
 }
 
-// Call clear selection when button is clicked.
+// Clears all of the player heat map hexes
+function clearPlayerHexes(){
+  d3.selectAll(".player").remove()
+  d3.selectAll(".percent").remove()
+  d3.selectAll(".hexagon").style("opacity",.6)
+  d3.select("#clearPlayer").style("visibility", "hidden")
+
+  playerHeatMap = false;
+}
+
+// clears selected list and resets the colors of the hexes
+function clearSelection(){
+  removeCards();
+  selectedShots = [];
+  d3.selectAll(".hexagon").filter(function(d){
+    var hex = d3.select(this);
+    hex.style("fill", "white")
+  })
+}
+
+// Clear selection when button is clicked.
 d3.select("#clearSelection").on("click", function(d){
   clearSelection();
 })
 
+// Get year selection
 d3.select("#years").on("change",function(){
   if (d3.select("#years").node().value != '0'){
     plotShots(svg, d3.select("#years").node().value );
   };
+  clearSelection();
 });
 
+// Get selected radius
 d3.select("#selectionRadius").on("input", function(){
   selectionRadius = d3.select("#selectionRadius").node().value
   d3.select("#brush").select("circle").attr("r", selectionRadius)
 });
+
+//Clear player hexes when clicked
+d3.select("#clearPlayer").on("click", function(){
+  clearPlayerHexes();
+  svg.selectAll(".legend").style("opacity", 0) //hide legend
+})
 

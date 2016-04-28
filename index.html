@@ -3,65 +3,13 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/2.2.2/isotope.pkgd.min.js"></script>
-  <script src="demo/d3.hexbin.js"></script>
+  <script src="d3.hexbin.min.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="main.css">
-<style>
-
-  body { 
-    font-family: "Open Sans"; 
-    background-color: #4d4d4d;
-    color: white;
-    margin: 0 auto;
-    text-align: center;
-    width: 1200px;
-  }
-  #court_area { 
-    display: inline-block;
-    margin: 0px; 
-    background-color: #eee; 
-    background-image: url("court_floor.gif");
-    background-size: 300px 300px;
-    border-radius: 10px;
-    width: 600px;
-  }
-  .controls {
-    text-align: center;
-    margin: 0 auto;
-    top:0;
-    width:150px;
-    height: 600px;
-    vertical-align: top;
-    display: inline-block;
-  }
-  .cards{
-    margin: 0 auto;
-    width:200px;
-    height: 600px;
-    vertical-align: top;
-    display: inline-block
-  }
-  .bar rect { fill: #ccc; }
-  .axis path { fill: none; stroke: black;}
-  .axis line { stroke: black; }
-  .axis text { font-size: x-small; }
-  .dullorange { fill: rgb(255, 167, 94); }
-  .hexagon {
-    fill: none;
-    stroke: #4d4d4d;
-    stroke-width: .5px;
-    opacity: .6
-}
-</style>
 </head>
 <body>
 <h3>Project 2: Insert Title Here</h3>
 <p> Ji Hun Kim (jk2227), Matt White (mpw73), Rudy Winkler (rgw66)</p>
-<div class="sorting">
-  <button type="button" id="makeCards" onclick="sort('made')">By Attempted</button><br/>
-  <button type="button" id="makeCards" onclick="sort('attempts')">By Made</button><br/>
-</div>
-<div class="player-cards"></div>
 <div class="controls"> 
   <select name="years" id="years">
     <option value="0" selected="selected">-- Select A Year --</option>
@@ -69,7 +17,7 @@
   <button type="button" id="clearSelection">Clear Selection</button><br/>
   <button type="button" id="makeCards" onclick="addPlayerCards()">Find Players</button><br/>
 
-  <input type="radio" name="selectionType" value="0" checked>Select<br/>
+  <input type="radio" name="selectionType" value="0" checked>Select</input><br/>
 
   <input type="radio" name="selectionType" value="1">De-Select<br/>
 
@@ -78,9 +26,20 @@
   <svg id="brush" width="80" height="80">
     <circle cx="40" cy="40" fill="white" r="7.5"></circle>
   </svg>
+  <button id="clearPlayer" style="visibility: hidden;">Clear Player Shot Chart</button>
 </div>
 <svg id="court_area"></svg>
-<div class="cards"></div>
+<div class="cards">
+  <div class="sorting">
+    <span>Sort By:</span><br/>
+    <button type="button" id="makeCards" onclick="sort('area_fg')">Field Goal Percentage</button><br/>
+    <button type="button" id="makeCards" onclick="sort('area_odds')">Likelihood to shoot from selected area</button><br/>
+    <button type="button" id="makeCards" onclick="sort('season_pts')">Season pts</button><br/>
+    <button type="button" id="makeCards" onclick="sort('season_rbds')">Season rebounds</button><br/>
+    <button type="button" id="makeCards" onclick="sort('season_assts')">Season Assists</button><br/>
+  </div>
+  <div class="player-cards"></div>
+</div>
 <script src="cards.js"></script>
 <script src="main.js"></script>
 

@@ -1,0 +1,22 @@
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="main.css">
+
+<div class='flip-container player-card' ontouchstart='this.classList.toggle('hover');'>
+    <div class='flipper'>
+      <div class='front' > 
+        <img src='http://stats.nba.com/media/players/230x185/955.png'>
+        <span class='name'>Kode Bryan</span>
+      </div> 
+      <div class='back'> 
+        <div class='stats'>
+          <h3>Season Stats</h3>
+          <p>PTS: <span id='season_pts'>1</span> RBDS: <span id='season_rbds'>2</span> ASSTS: <span id='season_assts'>3</span></p>
+          <h3>Selected Area Stats</h3>
+          <p>Shot Odds: <span id='area_odds'>4</span>% FG%: <span id='area_fg'>6</span>%</p>
+        </div>
+        <div class='buttons'>
+          <button type='button' id='makeCards' onclick='heatmap(player)'>Full Season Heatmap</button>
+        </div>
+      </div>
+    </div> 
+</div>
