@@ -285,6 +285,7 @@ d3.json("dictionary.json", function(error, result) {
 //     Creates clicking events for hexbins
 function plotShots(svg, season, player=-1) {
   players_map = season_players_map[season];
+  clearPlayerHexes();
 
   if (player == -1){
     svg.selectAll('.hexagon').remove(); // Remove all existing hexagons
@@ -307,7 +308,6 @@ function plotShots(svg, season, player=-1) {
         .style("fill", "white")
 
   }else{
-    clearPlayerHexes(); // remove current player hexes if any
     var shots = players_map[player][players_map[player].length -1];
 
     svg.selectAll(".legend").style("opacity", 1) // unhide legend
@@ -316,7 +316,6 @@ function plotShots(svg, season, player=-1) {
     color.domain([0,percentMade,1]);
 
     d3.selectAll(".hexagon").style("opacity",0) // hide all hexes
-    //d3.selectAll(".player").remove() // remove current player
     playerHeatMap = true;
 
     svg.append("g")
@@ -411,6 +410,8 @@ function clearPlayerHexes(){
   d3.selectAll(".percent").remove()
   d3.selectAll(".hexagon").style("opacity",.6)
   d3.select("#clearPlayer").style("visibility", "hidden")
+  d3.selectAll(".legend").style("opacity", 0) //hide legend
+
 
   playerHeatMap = false;
 }
@@ -447,6 +448,5 @@ d3.select("#selectionRadius").on("input", function(){
 //Clear player hexes when clicked
 d3.select("#clearPlayer").on("click", function(){
   clearPlayerHexes();
-  svg.selectAll(".legend").style("opacity", 0) //hide legend
 })
 
