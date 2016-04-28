@@ -60,7 +60,7 @@ function makePlayerCard(name,id,shots,attempts){
 "<div class='flip-container player-card' ontouchstart='this.classList.toggle('hover');'>" +
     "<div class='flipper'>" +
       "<div class='front' >" +
-        "<img src='http://stats.nba.com/media/players/230x185/"+id+".png'>"+
+        "<img src='http://stats.nba.com/media/players/230x185/"+id+".png'><br/><br/>"+
         "<span class='name'>"+name+"</span>" +
       "</div>" +
       "<div class='back'>" +

@@ -330,6 +330,7 @@ function plotShots(svg, season, player=-1) {
 
     //   }
   }else{
+    clearPlayerHexes();
     var shots = players_map[player][players_map[player].length -1];
 
     var percentMade = season_players_map[season][player][2]
@@ -381,7 +382,7 @@ function plotShots(svg, season, player=-1) {
     svg.selectAll(".percent").on("mouseover", function(d){
       var x = d3.select(this).attr("x")
       var y = d3.select(this).attr("y")
-      hexs = d3.selectAll(".hexagon").filter(function(h){
+      hexs = d3.selectAll(".player").filter(function(h){
         d3.select(this).style("opacity", .1)
 
         var hex = d3.select(this);
@@ -406,7 +407,7 @@ function plotShots(svg, season, player=-1) {
 
       var x = d3.select(this).attr("x")
       var y = d3.select(this).attr("y")
-      hexs = d3.selectAll(".hexagon").filter(function(h){
+      hexs = d3.selectAll(".player").filter(function(h){
         d3.select(this).style("opacity", .6)
         var hex = d3.select(this);
         if (hex){
@@ -439,6 +440,7 @@ d3.select("#years").on("change",function(){
   if (d3.select("#years").node().value != '0'){
     plotShots(svg, d3.select("#years").node().value );
   };
+  clearSelection();
 });
 
 d3.select("#selectionRadius").on("input", function(){

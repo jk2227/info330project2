@@ -10,13 +10,6 @@
 <body>
 <h3>Project 2: Insert Title Here</h3>
 <p> Ji Hun Kim (jk2227), Matt White (mpw73), Rudy Winkler (rgw66)</p>
-<div class="sorting">
-  <button type="button" id="makeCards" onclick="sort('area_fg')">Field Goal Percentage in selected area</button><br/>
-  <button type="button" id="makeCards" onclick="sort('area_odds')">Likelihood to shoot from selected area</button><br/>
-  <button type="button" id="makeCards" onclick="sort('season_pts')">Season pts</button><br/>
-  <button type="button" id="makeCards" onclick="sort('seaosn_rbds')">Season rebounds</button><br/>
-  <button type="button" id="makeCards" onclick="sort('season_assts')">Season Assists</button><br/>
-</div>
 <div class="controls"> 
   <select name="years" id="years">
     <option value="0" selected="selected">-- Select A Year --</option>
@@ -24,7 +17,7 @@
   <button type="button" id="clearSelection">Clear Selection</button><br/>
   <button type="button" id="makeCards" onclick="addPlayerCards()">Find Players</button><br/>
 
-  <input type="radio" name="selectionType" value="0" checked>Select<br/>
+  <input type="radio" name="selectionType" value="0" checked>Select</input><br/>
 
   <input type="radio" name="selectionType" value="1">De-Select<br/>
 
@@ -36,7 +29,17 @@
   <button id="clearPlayer" style="visibility: hidden;">Clear Player Shot Chart</button>
 </div>
 <svg id="court_area"></svg>
-<div class="player-cards"></div>
+<div class="cards">
+  <div class="sorting">
+    <span>Sort By:</span><br/>
+    <button type="button" id="makeCards" onclick="sort('area_fg')">Field Goal Percentage</button><br/>
+    <button type="button" id="makeCards" onclick="sort('area_odds')">Likelihood to shoot from selected area</button><br/>
+    <button type="button" id="makeCards" onclick="sort('season_pts')">Season pts</button><br/>
+    <button type="button" id="makeCards" onclick="sort('seaosn_rbds')">Season rebounds</button><br/>
+    <button type="button" id="makeCards" onclick="sort('season_assts')">Season Assists</button><br/>
+  </div>
+  <div class="player-cards"></div>
+</div>
 <script src="cards.js"></script>
 <script src="main.js"></script>
 
