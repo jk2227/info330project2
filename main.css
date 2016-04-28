@@ -105,12 +105,14 @@ body {
 }
 
 .player-card img{
+	background-image: url("crowd.jpg");
+ 	background-size: 300px 200px;
 	width: 90%;
     top: 12px;
     position: relative;
     border-radius: 10px;
     border: 1px inset;
-    background-color: #D0D0D0;
+    /*background-color: #D0D0D0;*/
 }
 
 .player-cards{
@@ -170,7 +172,11 @@ body {
 	-o-backface-visibility: hidden;
 	backface-visibility: hidden;
 
-	background-color: grey;
+	background: grey; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(black, grey); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(black, grey); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(black, grey); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(black, grey);
 	border: outset 1px;
 	border-radius: 10px;
 

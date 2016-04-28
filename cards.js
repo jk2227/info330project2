@@ -49,6 +49,7 @@ function sort(opt){
 
 function makePlayerCard(name,id,shots,attempts){
   var totalShots = players_map[id][6].length;
+  var season_fg = players_map[id][2];
   var season_pts = players_map[id][5];
   var season_rbds = players_map[id][3];
   var season_assts = players_map[id][4];
@@ -68,9 +69,10 @@ function makePlayerCard(name,id,shots,attempts){
       "<div class='back'>" +
         "<div class='stats'>" +
           "<h3>Season Stats</h3>" +
-          "<p>PTS: <span id='season_pts'>"+season_pts+"</span> RBDS: <span id='season_rbds'>"+season_rbds+"</span> ASSTS: <span id='season_assts'>"+season_assts+"</span></p>" +
+          "<p>PTS: <span id='season_pts'>"+season_pts+"  </span> Rebounds: <span id='season_rbds'>"+season_rbds+"</span></p>"+
+          "<p>ASSTS: <span id='season_assts'>"+season_assts+" </span> Field Goal %: <span id='season_fg'>"+season_fg+"</span></p>"+
           "<h3>Selected Area Stats</h3>" +
-          "<p>Shot Odds: <span id='area_odds'>"+area_odds+"%</span> FG%: <span id='area_fg'>"+area_fg+"%</span></p>" +
+          "<p>Shot Odds: <span id='area_odds'>"+area_odds+"%</span><br/> Field Goal %: <span id='area_fg'>"+area_fg+"%</span></p>" +
         "</div>" +
         "<div class='buttons'>" +
           "<button type='button' id='makeCards' onclick='plotShots(svg,\""+season+"\","+id+")'>Full Season Heatmap</button>" +
