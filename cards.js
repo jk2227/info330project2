@@ -40,10 +40,10 @@ function addPlayerCards(){
   }
   var c = $(cards);
   $(".player-cards").append( c ).isotope( 'appended', c );
+  sort('area_odds');
 }
 
 function sort(opt){
-  console.log("fdsa")
   $('.player-cards').isotope({ sortBy : opt, sortAscending : false});
 }
 
