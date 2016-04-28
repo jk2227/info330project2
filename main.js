@@ -291,7 +291,6 @@ d3.json("dictionary.json", function(error, result) {
 //     Creates hexbins using imputed season and global data initialized above.
 //     Creates clicking events for hexbins
 function plotShots(svg, season, player=-1) {
-  console.log(season)
   players_map = season_players_map[season];
 
   if (player == -1){
