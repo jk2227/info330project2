@@ -85,6 +85,8 @@ function makePlayerCard(name,id,shots,attempts){
   return elem
 }
 
+/*Some of the above html code was adapted from http://codepen.io/jjhesk/pen/lHdCA*/
+
 
 function sortShots(arr,opt){
   console.log(arr)

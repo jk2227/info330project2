@@ -130,6 +130,8 @@ body {
 }
 
 
+/*Code adapted from http://codepen.io/jjhesk/pen/lHdCA*/
+
 .flip-container {
 	-webkit-perspective: 1000;
 	-moz-perspective: 1000;
@@ -199,6 +201,8 @@ body {
 	background: black;
 }
 
+/*-------------End of citation area--------------------*/
+
 .front .name {
 	font-size: 2em;
 	font-weight: bolder;
@@ -215,4 +219,12 @@ body {
 
 .back h3{
 	color: white;
+}
+
+.sorting{
+	display: flex;
+}
+
+.sorting button{
+	display: flex;
 }
