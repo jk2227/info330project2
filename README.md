@@ -1,9 +1,3 @@
-# info330project2
-magic mimno 
+# Interactive NBA Shot Chart
 
-jihun checking in for his first commit
-jihun making his own branch 
-
-Checkin:
-
-Rudy Winkler (rgw66)
+Compare your shot preferences against those of NBA all stars!
